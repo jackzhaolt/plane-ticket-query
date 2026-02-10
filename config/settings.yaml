@@ -1,0 +1,99 @@
+# Flight Search Configuration
+search:
+  # Country-level search (searches ALL airports in these countries)
+  departure_countries:
+    - "US"  # United States (all major airports)
+    # - "CA"  # Canada (uncomment to add)
+
+  arrival_countries:
+    - "JP"  # Japan (all major airports)
+    - "KR"  # South Korea
+    # - "TW"  # Taiwan (uncomment to add)
+
+  # Optional: Specify exact airports (in addition to countries)
+  # These will be added to the country airports
+  departure_airports: []
+    # - "JFK"  # Add specific airports if needed
+
+  arrival_airports: []
+    # - "NRT"  # Add specific airports if needed
+
+  # Note: System will search ALL combinations:
+  # If departure_countries = ["US"] and arrival_countries = ["JP", "KR"]
+  # It searches: US airports → JP airports + US airports → KR airports
+
+  # Search parameters
+  cabin_class: "BUSINESS"  # ECONOMY, PREMIUM_ECONOMY, BUSINESS, FIRST
+  adults: 2
+  flexibility_days: 3  # Search +/- days around target date
+
+  # Date ranges to monitor (leave empty to search all upcoming dates)
+  date_ranges:
+    - start: "2026-06-01"
+      end: "2026-08-31"
+    - start: "2026-12-15"
+      end: "2027-01-10"
+
+# Deal Detection Thresholds
+deals:
+  # Award Chart Evaluation (PRIMARY METHOD)
+  use_award_chart: true  # Use distance-based award charts
+  award_chart: "standard"  # Options: standard, ana, delta
+  award_chart_min_quality: "good"  # Minimum: exceptional, great, good, fair
+
+  # Award chart bands (for reference - defined in award_charts.py):
+  #   0-5,000 miles: 55k-69k economy, 110k-140k business
+  #   5,001-7,500 miles: 75k-90k economy, 150k-180k business
+  #   7,501-11,000 miles: 87.5k-103.5k economy, 175k-210k business
+  #   11,001-15,000 miles: 110k-132k economy, 220k-264k business
+
+  # Fallback thresholds (used if award chart doesn't apply)
+  max_cash_price: 800  # USD
+  max_points: 90000    # Absolute maximum points
+  min_cpp: 1.5  # Minimum cents per point
+  min_miles_per_point: 0.05  # Minimum distance efficiency
+
+  # Amex transfer partner multipliers (for calculating point value)
+  transfer_partners:
+    delta: 1.0
+    ana: 1.0
+    virgin_atlantic: 1.0
+    air_canada: 1.0
+
+# Alert Configuration
+alerts:
+  enabled: true
+  email: true
+  sms: false  # Set to true if you configured Twilio
+
+  # How often to check (in minutes)
+  check_interval: 60
+
+  # Quiet hours (don't send alerts during these times)
+  quiet_hours:
+    enabled: false
+    start: "22:00"
+    end: "08:00"
+    timezone: "America/New_York"
+
+# Searcher Configuration
+searcher:
+  type: "hybrid"  # Options: "api", "selenium", or "hybrid" (recommended)
+  api_provider: "amadeus"  # Currently only amadeus supported
+
+  # Hybrid mode settings
+  hybrid:
+    # Use Selenium for deep checks on promising routes
+    use_selenium: true
+    selenium_headless: true  # Run browser in background
+    cache_expiry_hours: 6    # How long to cache Selenium results
+
+    # When to trigger Selenium scraping in auto mode
+    trigger_conditions:
+      max_api_price: 1000    # Trigger if API finds flights under this price
+      check_frequency: "weekly"  # How often to do deep Selenium checks
+
+  # Rate limiting
+  requests_per_minute: 10
+  retry_attempts: 3
+  retry_delay: 5  # seconds

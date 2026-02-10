@@ -1,0 +1,85 @@
+name: Search Flight Deals
+
+on:
+  # Run on schedule (cron)
+  schedule:
+    # Run every 6 hours: 00:00, 06:00, 12:00, 18:00 UTC
+    - cron: '0 */6 * * *'
+    # Syntax: minute hour day month day-of-week
+    # Examples:
+    # - cron: '0 */4 * * *'   # Every 4 hours
+    # - cron: '0 0 * * *'     # Daily at midnight UTC
+    # - cron: '0 8,20 * * *'  # Twice daily at 8am and 8pm UTC
+
+  # Allow manual trigger
+  workflow_dispatch:
+
+  # Optionally run on push (for testing)
+  # push:
+  #   branches: [ main ]
+
+jobs:
+  search-flights:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.9'
+        cache: 'pip'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Create .env file from secrets
+      run: |
+        cat > .env << EOF
+        # Amadeus API
+        AMADEUS_API_KEY=${{ secrets.AMADEUS_API_KEY }}
+        AMADEUS_API_SECRET=${{ secrets.AMADEUS_API_SECRET }}
+
+        # Amex Account (optional)
+        AMEX_USERNAME=${{ secrets.AMEX_USERNAME }}
+        AMEX_PASSWORD=${{ secrets.AMEX_PASSWORD }}
+
+        # Email Configuration
+        SMTP_SERVER=${{ secrets.SMTP_SERVER }}
+        SMTP_PORT=${{ secrets.SMTP_PORT }}
+        SMTP_USERNAME=${{ secrets.SMTP_USERNAME }}
+        SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}
+        ALERT_EMAIL=${{ secrets.ALERT_EMAIL }}
+
+        # SMS Configuration (optional)
+        TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID }}
+        TWILIO_AUTH_TOKEN=${{ secrets.TWILIO_AUTH_TOKEN }}
+        TWILIO_PHONE_NUMBER=${{ secrets.TWILIO_PHONE_NUMBER }}
+        ALERT_PHONE_NUMBER=${{ secrets.ALERT_PHONE_NUMBER }}
+        EOF
+
+    - name: Run flight search
+      run: |
+        cd /home/runner/work/plane-ticket-query/plane-ticket-query
+        python src/main.py --once
+
+    - name: Upload search logs (on failure)
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: search-logs
+        path: |
+          *.log
+          /tmp/flight_cache/
+        retention-days: 7
+
+    - name: Notify on completion
+      if: always()
+      run: |
+        echo "Flight search completed at $(date)"
+        echo "Status: ${{ job.status }}"

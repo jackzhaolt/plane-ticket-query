@@ -1,0 +1,42 @@
+name: Run Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.9'
+        cache: 'pip'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run demo test
+      run: python src/test_demo.py
+
+    - name: Run distance calculator test
+      run: python src/test_distance.py
+
+    - name: Run award chart test
+      run: python src/test_award_chart.py
+
+    - name: Run country search test
+      run: python src/test_country_search.py
+
+    - name: Run hybrid search test (without API keys)
+      run: python src/test_hybrid.py || true
