@@ -211,11 +211,68 @@ DELTA_AWARD_CHART = AwardChart(
 )
 
 
+# Aeroplan (Air Canada) award chart
+AEROPLAN_AWARD_CHART = AwardChart(
+    name="Aeroplan",
+    distance_bands=[
+        {
+            'min_miles': 0,
+            'max_miles': 500,
+            'economy': {'min': 6000, 'max': 10000},
+            'business': {'min': 10000, 'max': 15000},
+        },
+        {
+            'min_miles': 501,
+            'max_miles': 1500,
+            'economy': {'min': 10000, 'max': 15000},
+            'business': {'min': 15000, 'max': 25000},
+        },
+        {
+            'min_miles': 1501,
+            'max_miles': 2750,
+            'economy': {'min': 12500, 'max': 20000},
+            'business': {'min': 25000, 'max': 35000},
+        },
+        {
+            'min_miles': 2751,
+            'max_miles': 4000,
+            'economy': {'min': 25000, 'max': 35000},
+            'business': {'min': 50000, 'max': 60000},
+        },
+        {
+            'min_miles': 4001,
+            'max_miles': 5500,
+            'economy': {'min': 35000, 'max': 50000},
+            'business': {'min': 60000, 'max': 75000},
+        },
+        {
+            'min_miles': 5501,
+            'max_miles': 6500,
+            'economy': {'min': 50000, 'max': 60000},
+            'business': {'min': 75000, 'max': 90000},
+        },
+        {
+            'min_miles': 6501,
+            'max_miles': 7500,
+            'economy': {'min': 60000, 'max': 70000},
+            'business': {'min': 90000, 'max': 110000},
+        },
+        {
+            'min_miles': 7501,
+            'max_miles': 15000,
+            'economy': {'min': 70000, 'max': 80000},
+            'business': {'min': 110000, 'max': 120000},
+        },
+    ]
+)
+
+
 # Chart registry
 AWARD_CHARTS: Dict[str, AwardChart] = {
     'standard': STANDARD_AWARD_CHART,
     'ana': ANA_AWARD_CHART,
     'delta': DELTA_AWARD_CHART,
+    'aeroplan': AEROPLAN_AWARD_CHART,
 }
 
 

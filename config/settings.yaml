@@ -53,7 +53,7 @@ search:
 deals:
   # Award Chart Evaluation (PRIMARY METHOD)
   use_award_chart: true  # Use distance-based award charts
-  award_chart: "standard"  # Options: standard, ana, delta
+  award_chart: "aeroplan"  # Options: standard, ana, delta, aeroplan
   award_chart_min_quality: "good"  # Minimum: exceptional, great, good, fair
 
   # Award chart bands (for reference - defined in award_charts.py):

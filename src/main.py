@@ -154,7 +154,13 @@ class FlightMonitor:
                     print(f"✓ Found {len(deals)} deal(s) on {departure_date}")
                     all_deals.extend(deals)
                 else:
-                    print(f"  No deals found on {departure_date}")
+                    # Show lowest price found even if not a deal
+                    if flights:
+                        lowest = min(flights, key=lambda f: f.price_usd)
+                        print(f"  No deals found on {departure_date}")
+                        print(f"    Lowest price: ${lowest.price_usd:.0f} (~{lowest.points:,} pts) - {lowest.departure_airport}→{lowest.arrival_airport} ({lowest.airline})")
+                    else:
+                        print(f"  No deals found on {departure_date}")
 
             except Exception as e:
                 print(f"✗ Error searching {departure_date}: {e}")
