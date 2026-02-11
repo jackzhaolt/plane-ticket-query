@@ -36,12 +36,18 @@ search:
   adults: 2
   flexibility_days: 3  # Search +/- days around target date
 
-  # Date ranges to monitor (leave empty to search all upcoming dates)
+  # Date ranges to monitor (overridden by GitHub Actions parallel jobs)
   date_ranges:
-    - start: "2026-06-15"
-      end: "2026-07-15"    # Focus on mid-summer (1 month)
-    - start: "2026-12-20"
-      end: "2026-12-31"    # Focus on holiday week
+    - start: "2026-04-01"
+      end: "2026-04-30"    # April
+    - start: "2026-05-01"
+      end: "2026-05-31"    # May
+    - start: "2026-09-01"
+      end: "2026-09-30"    # September
+    - start: "2026-10-01"
+      end: "2026-10-31"    # October
+    - start: "2026-11-01"
+      end: "2026-11-30"    # November
 
 # Deal Detection Thresholds
 deals:

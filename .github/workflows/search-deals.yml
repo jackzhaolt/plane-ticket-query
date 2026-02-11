@@ -19,8 +19,8 @@ on:
   #   branches: [ main ]
 
 jobs:
-  # Job 1: Search June flights
-  search-june:
+  # Job 1: Search April flights
+  search-april:
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -42,11 +42,8 @@ jobs:
     - name: Create .env file from secrets
       run: |
         cat > .env << EOF
-        # Amadeus API
         AMADEUS_API_KEY=${{ secrets.AMADEUS_API_KEY }}
         AMADEUS_API_SECRET=${{ secrets.AMADEUS_API_SECRET }}
-
-        # Email Configuration
         SMTP_SERVER=${{ secrets.SMTP_SERVER }}
         SMTP_PORT=${{ secrets.SMTP_PORT }}
         SMTP_USERNAME=${{ secrets.SMTP_USERNAME }}
@@ -54,12 +51,12 @@ jobs:
         ALERT_EMAIL=${{ secrets.ALERT_EMAIL }}
         EOF
 
-    - name: Search June flights
+    - name: Search April flights
       run: |
-        python src/main.py --once --start-date 2026-06-15 --end-date 2026-06-30
+        python src/main.py --once --start-date 2026-04-01 --end-date 2026-04-30
 
-  # Job 2: Search July flights
-  search-july:
+  # Job 2: Search May flights
+  search-may:
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -81,11 +78,8 @@ jobs:
     - name: Create .env file from secrets
       run: |
         cat > .env << EOF
-        # Amadeus API
         AMADEUS_API_KEY=${{ secrets.AMADEUS_API_KEY }}
         AMADEUS_API_SECRET=${{ secrets.AMADEUS_API_SECRET }}
-
-        # Email Configuration
         SMTP_SERVER=${{ secrets.SMTP_SERVER }}
         SMTP_PORT=${{ secrets.SMTP_PORT }}
         SMTP_USERNAME=${{ secrets.SMTP_USERNAME }}
@@ -93,12 +87,12 @@ jobs:
         ALERT_EMAIL=${{ secrets.ALERT_EMAIL }}
         EOF
 
-    - name: Search July flights
+    - name: Search May flights
       run: |
-        python src/main.py --once --start-date 2026-07-01 --end-date 2026-07-15
+        python src/main.py --once --start-date 2026-05-01 --end-date 2026-05-31
 
-  # Job 3: Search December holiday flights
-  search-december:
+  # Job 3: Search September flights
+  search-september:
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -120,11 +114,8 @@ jobs:
     - name: Create .env file from secrets
       run: |
         cat > .env << EOF
-        # Amadeus API
         AMADEUS_API_KEY=${{ secrets.AMADEUS_API_KEY }}
         AMADEUS_API_SECRET=${{ secrets.AMADEUS_API_SECRET }}
-
-        # Email Configuration
         SMTP_SERVER=${{ secrets.SMTP_SERVER }}
         SMTP_PORT=${{ secrets.SMTP_PORT }}
         SMTP_USERNAME=${{ secrets.SMTP_USERNAME }}
@@ -132,9 +123,81 @@ jobs:
         ALERT_EMAIL=${{ secrets.ALERT_EMAIL }}
         EOF
 
-    - name: Search December holiday flights
+    - name: Search September flights
       run: |
-        python src/main.py --once --start-date 2026-12-20 --end-date 2026-12-31
+        python src/main.py --once --start-date 2026-09-01 --end-date 2026-09-30
+
+  # Job 4: Search October flights
+  search-october:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.9'
+        cache: 'pip'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Create .env file from secrets
+      run: |
+        cat > .env << EOF
+        AMADEUS_API_KEY=${{ secrets.AMADEUS_API_KEY }}
+        AMADEUS_API_SECRET=${{ secrets.AMADEUS_API_SECRET }}
+        SMTP_SERVER=${{ secrets.SMTP_SERVER }}
+        SMTP_PORT=${{ secrets.SMTP_PORT }}
+        SMTP_USERNAME=${{ secrets.SMTP_USERNAME }}
+        SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}
+        ALERT_EMAIL=${{ secrets.ALERT_EMAIL }}
+        EOF
+
+    - name: Search October flights
+      run: |
+        python src/main.py --once --start-date 2026-10-01 --end-date 2026-10-31
+
+  # Job 5: Search November flights
+  search-november:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.9'
+        cache: 'pip'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Create .env file from secrets
+      run: |
+        cat > .env << EOF
+        AMADEUS_API_KEY=${{ secrets.AMADEUS_API_KEY }}
+        AMADEUS_API_SECRET=${{ secrets.AMADEUS_API_SECRET }}
+        SMTP_SERVER=${{ secrets.SMTP_SERVER }}
+        SMTP_PORT=${{ secrets.SMTP_PORT }}
+        SMTP_USERNAME=${{ secrets.SMTP_USERNAME }}
+        SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}
+        ALERT_EMAIL=${{ secrets.ALERT_EMAIL }}
+        EOF
+
+    - name: Search November flights
+      run: |
+        python src/main.py --once --start-date 2026-11-01 --end-date 2026-11-30
 
     - name: Upload search logs (on failure)
       if: failure()
