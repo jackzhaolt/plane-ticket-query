@@ -1,22 +1,28 @@
 # Flight Search Configuration
 search:
-  # Country-level search (searches ALL airports in these countries)
-  departure_countries:
-    - "US"  # United States (all major airports)
-    # - "CA"  # Canada (uncomment to add)
+  # Departure airports (your convenient airports)
+  departure_airports:
+    - "JFK"  # New York JFK
+    - "EWR"  # Newark
+    - "LAX"  # Los Angeles
+    - "SFO"  # San Francisco
+    # Add more airports near you:
+    # - "BOS"  # Boston
+    # - "ORD"  # Chicago
+    # - "DEN"  # Denver
+    # - "SEA"  # Seattle
+    # - "DFW"  # Dallas
+    # - "ATL"  # Atlanta
 
+  # Arrival destinations (keep country-level for flexibility)
   arrival_countries:
     - "JP"  # Japan (all major airports)
     - "KR"  # South Korea
     # - "TW"  # Taiwan (uncomment to add)
 
-  # Optional: Specify exact airports (in addition to countries)
-  # These will be added to the country airports
-  departure_airports: []
-    # - "JFK"  # Add specific airports if needed
-
+  # Override: Don't use country-level for departure
+  departure_countries: []
   arrival_airports: []
-    # - "NRT"  # Add specific airports if needed
 
   # Note: System will search ALL combinations:
   # If departure_countries = ["US"] and arrival_countries = ["JP", "KR"]
