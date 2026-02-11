@@ -38,10 +38,10 @@ search:
 
   # Date ranges to monitor (leave empty to search all upcoming dates)
   date_ranges:
-    - start: "2026-06-01"
-      end: "2026-08-31"
-    - start: "2026-12-15"
-      end: "2027-01-10"
+    - start: "2026-06-15"
+      end: "2026-07-15"    # Focus on mid-summer (1 month)
+    - start: "2026-12-20"
+      end: "2026-12-31"    # Focus on holiday week
 
 # Deal Detection Thresholds
 deals:
