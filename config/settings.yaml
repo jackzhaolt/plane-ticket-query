@@ -18,7 +18,7 @@ search:
   arrival_countries:
     - "JP"  # Japan (all major airports)
     - "KR"  # South Korea
-    # - "TW"  # Taiwan (uncomment to add)
+    - "TW"  # Taiwan (Taipei)
 
   # Override: Don't use country-level for departure
   departure_countries: []
