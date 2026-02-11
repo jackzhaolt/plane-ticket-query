@@ -5,9 +5,10 @@ import sys
 import yaml
 import schedule
 import time
+import argparse
 from datetime import date, datetime, timedelta
 from dotenv import load_dotenv
-from typing import List
+from typing import List, Optional
 
 # Add src to path for imports
 sys.path.insert(0, os.path.dirname(__file__))
@@ -23,16 +24,25 @@ from country_airports import expand_country_config
 class FlightMonitor:
     """Main flight monitoring and alert system."""
 
-    def __init__(self, config_path: str = "config/settings.yaml"):
+    def __init__(self, config_path: str = "config/settings.yaml",
+                 date_start: Optional[str] = None, date_end: Optional[str] = None):
         """
         Initialize flight monitor.
 
         Args:
             config_path: Path to configuration file
+            date_start: Optional start date override (YYYY-MM-DD)
+            date_end: Optional end date override (YYYY-MM-DD)
         """
         # Load configuration
         with open(config_path, 'r') as f:
             self.config = yaml.safe_load(f)
+
+        # Override date ranges if provided via command line
+        if date_start and date_end:
+            self.config['search']['date_ranges'] = [
+                {'start': date_start, 'end': date_end}
+            ]
 
         # Initialize components
         self.searcher = self._init_searcher()
@@ -224,6 +234,16 @@ class FlightMonitor:
 
 def main():
     """Main entry point."""
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(description='Flight deal monitoring system')
+    parser.add_argument('--once', action='store_true',
+                        help='Run once and exit (instead of continuous monitoring)')
+    parser.add_argument('--start-date', type=str,
+                        help='Override start date (YYYY-MM-DD)')
+    parser.add_argument('--end-date', type=str,
+                        help='Override end date (YYYY-MM-DD)')
+    args = parser.parse_args()
+
     # Load environment variables
     load_dotenv()
 
@@ -233,12 +253,15 @@ def main():
         print("Please copy .env.example to .env and fill in your API keys.\n")
         sys.exit(1)
 
-    # Create monitor
+    # Create monitor with optional date overrides
     try:
-        monitor = FlightMonitor()
+        monitor = FlightMonitor(
+            date_start=args.start_date,
+            date_end=args.end_date
+        )
 
-        # Check command line arguments
-        if len(sys.argv) > 1 and sys.argv[1] == '--once':
+        # Check if running once or continuous
+        if args.once:
             # Run once and exit
             monitor.run_once()
         else:
