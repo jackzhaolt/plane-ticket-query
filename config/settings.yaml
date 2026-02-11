@@ -17,6 +17,7 @@ search:
   # Arrival destinations (keep country-level for flexibility)
   arrival_countries:
     - "JP"  # Japan (all major airports)
+    - "KR"  # South Korea
     - "TW"  # Taiwan (Taipei)
 
   # Specific arrival airports (in addition to countries above)
