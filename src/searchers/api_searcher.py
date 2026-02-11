@@ -122,6 +122,18 @@ class AmadeusSearcher(FlightSearcher):
                 # Extract airline
                 airline_code = first_segment['carrierCode']
 
+                # Extract cabin class (from travelerPricings, not segment)
+                cabin_class = "UNKNOWN"
+                try:
+                    # Amadeus stores cabin in travelerPricings > fareDetailsBySegment
+                    cabin_class = offer['travelerPricings'][0]['fareDetailsBySegment'][0]['cabin']
+                except (KeyError, IndexError):
+                    # Fallback: try to get from segment co2Emissions
+                    try:
+                        cabin_class = first_segment['co2Emissions'][0]['cabin']
+                    except (KeyError, IndexError):
+                        pass
+
                 # Estimate points (rough calculation: 1 cent per point)
                 # In reality, this would need Amex transfer partner data
                 estimated_points = int(price * 100)  # Placeholder logic
@@ -134,7 +146,7 @@ class AmadeusSearcher(FlightSearcher):
                     price_usd=price,
                     points=estimated_points,
                     airline=airline_code,
-                    cabin_class=first_segment['cabin'],
+                    cabin_class=cabin_class,
                     stops=stops,
                     booking_url=None  # API doesn't provide direct booking URL
                 )
