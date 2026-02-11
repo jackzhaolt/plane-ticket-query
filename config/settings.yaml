@@ -17,12 +17,14 @@ search:
   # Arrival destinations (keep country-level for flexibility)
   arrival_countries:
     - "JP"  # Japan (all major airports)
-    - "KR"  # South Korea
     - "TW"  # Taiwan (Taipei)
+
+  # Specific arrival airports (in addition to countries above)
+  arrival_airports:
+    - "PEK"  # Beijing
 
   # Override: Don't use country-level for departure
   departure_countries: []
-  arrival_airports: []
 
   # Note: System will search ALL combinations:
   # If departure_countries = ["US"] and arrival_countries = ["JP", "KR"]
